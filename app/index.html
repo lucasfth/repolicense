@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" class="sl-theme-dark">
+<head>
+  <title>Repolicense</title>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="keywords" content="open source, license, GitHub, software licensing, project licensing, MIT, GPL, Apache, open source projects" />
+  <meta name="description" content="License Selector helps you choose the right license for your open source project on GitHub and other platforms." />
+  <meta name="subject" content="Open Source Project Licensing" />
+  <meta name="robots" content="index,follow" />
+  <meta name="author" content="License Selector Team" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="./resources/css/index.css" type="text/css" rel="stylesheet">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="License Selector for Open Source Projects" />
+  <meta property="og:description" content="Easily select the appropriate license for your open source project with License Selector." />
+  <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
+  <meta property="og:url" content="https://licenseselector.com" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="License Selector" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="License Selector for Open Source Projects" />
+  <meta name="twitter:description" content="Find the perfect license for your open source project with License Selector." />
+  <meta name="twitter:image" content="%PUBLIC_URL%/twitter-image.png" />
+  <meta name="twitter:site" content="@LicenseSelector" />
+  <meta name="twitter:creator" content="@LicenseSelector" />
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
+  <link rel="mask-icon" href="%PUBLIC_URL%/safari-pinned-tab.svg" color="#5bbad5" />
+  <meta name="msapplication-TileColor" content="#da532c" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/dark.css" />
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <div id="background">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+
+  <sl-radio-group id="nav-radio-group" value="1">
+    <sl-radio-button value="1">
+      <sl-icon slot="prefix" name="house"></sl-icon>
+      Home
+    </sl-radio-button>
+    <sl-radio-button value="2">
+      <sl-icon slot="prefix" name="question-octagon"></sl-icon>
+      Info
+    </sl-radio-button>
+  </sl-radio-group>
+
+  <div class="container">
+    <h1>Repolicense</h1>
+    <h2>Choose the right license for your open source project</h2>
+  </div>
+
+  <sl-card id="questionnaire" class="container">
+    <sl-details id="details" summary="Empty" class="custom-icons"></sl-details>
+    
+    <sl-button-group label="Alignment">
+      <sl-tooltip content="I agree and want to proceed">
+        <sl-button id="yes" variant="success">
+          <sl-icon name="check-lg" label="Yes"></sl-icon>
+        </sl-button>
+      </sl-tooltip>
+      <sl-tooltip content="I disagree and want to proceed">
+        <sl-button id="no" variant="danger">
+          <sl-icon name="x-lg" label="No"></sl-icon>
+        </sl-button>
+      </sl-tooltip>
+    </sl-button-group>
+
+    <sl-button-group>
+      <sl-tooltip content="Back to previous question">
+        <sl-button id="back" label="Back to previous question">
+          <sl-icon name="arrow-left" label="Left arrow icon"></sl-icon>
+        </sl-button>
+      </sl-tooltip>
+      <sl-tooltip content="Reset the questionnaire">
+        <sl-button id="reset" label="Reset the questionnaire">
+          <sl-icon name="arrow-counterclockwise" label="Counterclockwise arrow icon"></sl-icon>
+        </sl-button>
+      </sl-tooltip>
+    </sl-button-group>
+  </sl-card>
+
+  <div class="creator container">
+    <p>Created by <a href="https://lucashanson.dk" target="_blank">Lucas Hanson</a> - <span class="year">2000</span></p>
+    <p>This webpage is built using</p>
+    <p>
+      <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" aria-label="HTML5"/>
+      <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" aria-label="CSS3"/>
+      <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" aria-label="JavaScript"/>
+      <img src="https://img.shields.io/badge/shoelace-0CA5E9?style=for-the-badge&logo=shoelace&logoColor=white" aria-label="Shoelace"/>
+    </p>
+    <p>Hosted on</p>
+    <p><img src="https://img.shields.io/badge/Nordicway-3E80C1?style=for-the-badge&logo=nordicway&logoColor=white" aria-label="Nordicway" /></p>
+  </div>
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script>
+  <script src="./resources/js/logic.js"></script>
+  <script src="./resources/js/routing.js"></script>
+  <script src="./resources/js/creator.js"></script>
+</body>
+</html>
