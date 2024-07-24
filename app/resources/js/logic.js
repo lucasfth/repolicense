@@ -7,24 +7,33 @@ const backButton = document.getElementById('back');
 const resetButton = document.getElementById('reset');
 const licenses = document.getElementById('licenses');
 const downloadTreeText = document.getElementById('download-tree');
+const downloadMermaid = document.getElementById('download-mermaid');
 const BASE_URL = 'https://api.github.com/licenses/';
 const LICENSE_URL = 'https://docs.github.com/en/rest/licenses/licenses';
+const UNDEFINED_LICENSES = ['Consider using', 'You should'];
+const alert = document.querySelector('sl-alert');
 
-function fetchDescription(license) {
-  fetch(BASE_URL + license)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      setLicenseDesc(data.description);
-    })
-    .catch(error => console.error(error));
+async function fetchDescription() {
+  try {
+    const resp = await fetch (BASE_URL + tree.answer);
+    const data = await resp.json();
+    return (data.description);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function setLicenseDesc(desc) {
-  if (!desc) {
+async function setLicenseDesc() {
+  if (isLicenseAnswer()) {
     return;
   }
-  details.innerHTML = desc + '<br/><a href="${LICENSE_URL}" target="_blank">Description fetched from GitHub API</a>'
+  try {
+    console.log('licenseDesc', tree.answer);
+    const desc = await fetchDescription();
+    details.innerHTML = `${desc}<br/><a href="${LICENSE_URL}" target="_blank">Description fetched from GitHub API</a>`;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function main(choice) {
@@ -40,10 +49,10 @@ function main(choice) {
 }
 
 function updateInfo() {
-  console.log('updateInfo');
+  details.innerHTML = '';
   if (!tree.isQuestion) {
-    details.summary = tree.answer;
-    details.innerText = '';
+    details.summary = answerStr();
+    setLicenseDesc();
     console.log('\tanswer');
   } else {
     details.summary = tree.question;
@@ -53,11 +62,70 @@ function updateInfo() {
   buttonAvailability();
 }
 
+function decisionTreeToMermaid() {
+  const mermaid = 'graph TD\n';
+  const nodes = [];
+
+  function response(node) {
+    if (node.isQuestion) {
+      return node.question;
+    }
+    return node.answer;
+  }
+
+  function makeId() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let counter = 0;
+    let res = '';
+    while (counter < 6) {
+      res += characters.charAt(Math.floor(Math.random() * characters.length));
+      counter++;
+    }
+    return res;
+  }
+
+  function traverse(node, curId) {
+    if (!node) {
+      return;
+    }
+    if (!node.isQuestion) { return; }
+    const yesId = makeId();
+    const noId = makeId();
+    nodes.push(`${curId}("${node.question}") -- yes --> ${yesId}("${response(node.yes)}")`);
+    nodes.push(`${curId}("${node.question}") -- no --> ${noId}("${response(node.no)}")`);
+    traverse(node.yes, yesId);
+    traverse(node.no, noId);
+  }
+  traverse(decisionTree.head, makeId());
+
+  const resStr = mermaid + nodes.join('\n');
+
+  navigator.clipboard.writeText(resStr).then(function() {
+    alert.variant = 'success';
+    alert.innerHTML = '<sl-icon slot="icon" name="check2-circle"></sl-icon>' + 'The mermaid diagram has successfully been downloaded to your clipboard';
+    alert.show();
+  }, function(err) {
+    alert.variant = 'danger';
+    alert.innerHTML = '<sl-icon slot="icon" name="exclamation-octagon"></sl-icon>' + 'Could not copy text: ' + err;
+    console.error('Could not copy text: ', err);
+  });
+}
+
+function isLicenseAnswer() {
+  return UNDEFINED_LICENSES.some(str => (tree.answer).includes(str));
+}
+
+function answerStr() {
+  if (isLicenseAnswer()) {
+    return tree.answer;
+  }
+  return 'Choose the ' + tree.answer + ' license.';
+}
+
 function buttonAvailability() {
   if (!tree.isQuestion) {
     yesButton.disabled = true;
     noButton.disabled = true;
-    fetchDescription(tree.answer.split(' ')[1]);
   } else {
     if (yesButton.hasAttribute('disabled') && noButton.hasAttribute('disabled')) {
       yesButton.removeAttribute('disabled');
@@ -152,15 +220,11 @@ function flatten(node) {
   if (node.isQuestion) {
     return flatten(node.yes).concat(flatten(node.no));
   }
-  const res = removeStr(node.answer, 'Choose ');
+  const res = node.answer;
   if (res.includes('Consider') || res.includes('You should')) {
     return;
   }
   return [res];
-}
-
-function removeStr(str, rm) {
-  return str.replace(rm, '');
 }
 
 function downloadTree() {
@@ -182,6 +246,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     downloadTreeText.addEventListener('mousedown', function() {
       downloadTree();
+    });
+
+    downloadMermaid.addEventListener('mousedown', function() {
+      decisionTreeToMermaid();
     });
   }
 
@@ -231,11 +299,11 @@ const decisionTree = {
             making it as simple as possible for others to use your code.`,
           yes: { // Do you want the simplest and most permissive license possible? -> Yes
             isQuestion: false,
-            answer: 'Choose MIT',
+            answer: 'MIT',
           },
           no: { // Do you want the simplest and most permissive license possible? -> No
             isQuestion: false,
-            answer: 'Choose BSD-2-Clause',
+            answer: 'BSD-2-Clause',
           },
         },
         no: { // Do you require minimal conditions? -> No
@@ -246,7 +314,7 @@ const decisionTree = {
             This is an important consideration for projects that may involve patented technology.`,
           yes: { // Do you want explicit patent grants? -> Yes
             isQuestion: false,
-            answer: 'Choose Apache-2.0',
+            answer: 'Apache-2.0',
           },
           no: { // Do you want explicit patent grants? -> No
             isQuestion: true,
@@ -255,7 +323,7 @@ const decisionTree = {
               and not using the name of the project or its contributors for promotion without permission.`,
             yes: { // Do you want a permissive license with some conditions? -> Yes
               isQuestion: false,
-              answer: 'Choose BSD-3-Clause',
+              answer: 'BSD-3-Clause',
             },
             no: { // Do you want a permissive license with some conditions? -> No
               isQuestion: true,
@@ -264,11 +332,11 @@ const decisionTree = {
                 providing complete freedom to use the code without any restrictions.`,
               yes: { // Do you want the simplest permissive license with no conditions? -> Yes
                 isQuestion: false,
-                answer: 'Choose 0BSD',
+                answer: '0BSD',
               },
               no: { // Do you want the simplest permissive license with no conditions? -> No
                 isQuestion: false,
-                answer: 'Choose ISC',
+                answer: 'ISC',
               },
             },
           },
@@ -294,7 +362,7 @@ const decisionTree = {
               must also have access to the source code.`,
             yes: { // Do you want network server protection? -> Yes 
               isQuestion: false,
-              answer: 'Choose AGPL-3.0',
+              answer: 'AGPL-3.0',
             },
             no: { // Do you want network server protection? -> No
               isQuestion: true,
@@ -303,11 +371,11 @@ const decisionTree = {
                 and clarifications compared to older versions.`,
               yes: { // Do you want to use the latest version of the GPL license? -> Yes
                 isQuestion: false,
-                answer: 'Choose GPL-3.0',
+                answer: 'GPL-3.0',
               },
               no: { // Do you want to use the latest version of the GPL license? -> No
                 isQuestion: false,
-                answer: 'Choose GPL-2.0',
+                answer: 'GPL-2.0',
               },
             },
           },
@@ -318,7 +386,7 @@ const decisionTree = {
               as a library in proprietary software while keeping modifications to the library itself open source.`,
             yes: { // Do you want to allow linking with non-(L)GPL software? -> Yes
               isQuestion: false,
-              answer: 'Choose LGPL-3.0',
+              answer: 'LGPL-3.0',
             },
             no: { // Do you want to allow linking with non-(L)GPL software? -> No
               isQuestion: true,
@@ -327,7 +395,7 @@ const decisionTree = {
                 such as allowing proprietary modules in your project.`,
               yes: { // Do you want a copyleft license with weaker requirements? -> Yes
                 isQuestion: false,
-                answer: 'Choose MPL-2.0',
+                answer: 'MPL-2.0',
               },
               no: { // Do you want a copyleft license with weaker requirements? -> No
                 isQuestion: true,
@@ -336,11 +404,11 @@ const decisionTree = {
                   making it easier for companies to adopt.`,
                 yes: { // Do you prefer a copyleft license with a focus on business-friendly terms? -> Yes
                   isQuestion: false,
-                  answer: 'Choose EPL-2.0',
+                  answer: 'EPL-2.0',
                 },
                 no: { // Do you prefer a copyleft license with a focus on business-friendly terms? -> No
                   isQuestion: false,
-                  answer: 'Choose EPL-1.0',
+                  answer: 'EPL-1.0',
                 },
               },
             },
@@ -353,7 +421,7 @@ const decisionTree = {
             your work without any restrictions.`,
           yes: { // Do you want to dedicate your work to the public domain? -> Yes
             isQuestion: false,
-            answer: 'Choose Unlicense',
+            answer: 'Unlicense',
           },
           no: { // Do you want to dedicate your work to the public domain? -> No
             isQuestion: true,
@@ -362,7 +430,7 @@ const decisionTree = {
               allowing embedding, modifying, and redistributing the font.`,
             yes: { // Do you want a license for fonts? -> Yes
               isQuestion: false,
-              answer: 'Choose OFL-1.1',
+              answer: 'OFL-1.1',
             },
             no: { // Do you want a license for fonts? -> No
               isQuestion: false,

@@ -66,6 +66,11 @@
 
   <sl-dialog label="Licenses" class="dialog-scrolling dialog-scroll" style="--width: 600px">
     <div style="height: fit-content; border: dashed 2px var(--sl-color-neutral-200); padding: 0 1rem;">
+      <div class="alert-duration" style="width: fit-content; position: absolute; bottom: 0; right: 0; z-index: 20;">
+        <sl-alert variant="primary" duration="2000" closable>
+          Content
+        </sl-alert>
+      </div>
       <p>
         Please also do your own research to ensure that the license you choose is the right one for your project.
         But this should provide you with a good starting point.
@@ -74,10 +79,12 @@
       </p>
       <span id="licenses" class="wrap-text"></span>
       <p>
-        The decision tree can also be downloaded by clicking <a href="" id="download-tree">here</a>.
+        The decision tree can also be downloaded by clicking <a href="#" id="download-tree">here</a>.
         But good luck with reading it, it's quite big 🥵
         <br/>
-        If you want to see it visually ChatGPT should be able to help you with translating it to e.g. MermaidJS.
+        You can also download the Mermaid diagram to you clipboard by clicking
+        <a href="#" id="download-mermaid">here</a>.
+        You can then paste it into a Mermaid editor to view it, e.g <a href="https://mermaid.live" target="_blank">here</a>.
       </p>
     </div>
     <sl-button slot="footer" variant="primary">Close</sl-button>
