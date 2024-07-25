@@ -1,4 +1,6 @@
-# repolicense
+# Repolicense
+
+![Do you have an idea for a better logo? Then please reach out](./app/public/favicon-192x192.png "Do you have an idea for a better logo? Then please reach out")
 
 Will be hosted at [repolicense.com](https://repolicense.com)
 
