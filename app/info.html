@@ -55,7 +55,7 @@
     </sl-radio-button>
     <sl-radio-button value="2">
       <sl-icon slot="prefix" name="question-octagon"></sl-icon>
-      Info
+      Info&nbsp;
     </sl-radio-button>
   </sl-radio-group>
 
@@ -79,12 +79,17 @@
       </p>
       <span id="licenses" class="wrap-text"></span>
       <p>
-        The decision tree can also be downloaded by clicking <a href="#" id="download-tree">here</a>.
+
+        You can <b>download the javascript decision tree</b> by clicking <a href="#" id="download-tree">here</a>.
         But good luck with reading it, it's quite big 🥵
         <br/>
-        You can also download the Mermaid diagram to you clipboard by clicking
+        You can also <b>download the Mermaid diagram</b> to your clipboard by clicking
         <a href="#" id="download-mermaid">here</a>.
-        You can then paste it into a Mermaid editor to view it, e.g <a href="https://mermaid.live" target="_blank">here</a>.
+        The Mermaid diagram can then be pasted into a Mermaid editor to view it, e.g. <a href="https://mermaid.live" target="_blank" rel="noopener noreferrer">here</a>.
+        <br/>
+        <br/>
+        Oh, and you will not be able to find the Mermaid diagram or the license list, as they are generated from the JavaScript decision tree.
+        So yeah I spent too much time on recursive functions to generate them 😅
       </p>
     </div>
     <sl-button slot="footer" variant="primary">Close</sl-button>
@@ -99,11 +104,15 @@
   <sl-dialog label="Project & feedback" class="dialog-scrolling-2 dialog-scroll" style="--width: 600px">
     <div style="height: fit-content; border: dashed 2px var(--sl-color-neutral-200); padding: 0 1rem;">
       <p>
-        This project is open source and can be found on GitHub <a href="https://github.com/lucasfth/repolicense" target="_blank">here</a>.
-        It has been created as I felt like the amount of licenses available can be overwhelming and I wanted to provide a simple and easy to use tool for selecting the right license for your open source project.
+        This project has been created as I felt like the number of licenses available can be overwhelming and I wanted to provide a simple and easy-to-use tool for selecting the right license for your open source project.
+        But I am no expert in licensing, so please do your own research to ensure that the license you choose is the right one for your project.
+        But it should provide you with a good starting point.
         <br/>
         <br/>
-        If you have any feedback or suggestions for improvements, please create an issue on GitHub or reach out to me directly on <a href="mailto:contact+repolicense@lucashanson.dk?subject=Repolicense%20feedback">this email</a>.
+        If you are an expert in licensing or you have general feedback, you can either create a new conversation or a new issue on GitHub.
+        You can find the source code <a href="https://github.com/lucasfth/repolicense" target="_blank" rel="noopener noreferrer">here</a>.
+        You can also reach out to me with <a href="mailto:contact+repolicense@lucashanson.dk?subject=Repolicense%20feedback">this email</a>.
+        This project is open source and can be found on GitHub <a href="https://github.com/lucasfth/repolicense" target="_blank" rel="noopener noreferrer">here</a>.
       </p>
     </div>
     <sl-button slot="footer" variant="primary">Close</sl-button>
@@ -116,7 +125,7 @@
   </sl-button>
 
   <div class="creator container">
-    <p>Created by <a href="https://lucashanson.dk" target="_blank">Lucas Hanson</a> - <span class="year">2000</span></p>
+    <p>Created by <a href="https://lucashanson.dk" target="_blank" rel="noopener noreferrer">Lucas Hanson</a> - <span class="year">2000</span></p>
     <p>This webpage is built using</p>
     <p>
       <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" aria-label="HTML5"/>

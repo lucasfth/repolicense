@@ -1,5 +1,3 @@
-let nodeStack = [];
-
 const details = document.getElementById('details');
 const yesButton = document.getElementById('yes');
 const noButton = document.getElementById('no');
@@ -13,59 +11,120 @@ const LICENSE_URL = 'https://docs.github.com/en/rest/licenses/licenses';
 const UNDEFINED_LICENSES = ['Consider using', 'You should'];
 const alert = document.querySelector('sl-alert');
 
-async function fetchDescription() {
-  try {
-    const resp = await fetch (BASE_URL + tree.answer);
-    const data = await resp.json();
-    return (data.description);
-  } catch (error) {
-    console.error(error);
-  }
-}
+let nodeStack = [];
+let tree;
 
+/**
+ * Set the license description based on the fetched data from the GitHub API.
+ * @returns {Promise<void>}
+ */
 async function setLicenseDesc() {
+
+  /**
+   * Fetches the description of the license from the GitHub API.
+   * @returns {Promise<string>}
+   */
+  async function fetchDescription() {
+    try {
+      const resp = await fetch (BASE_URL + tree.answer);
+      const data = await resp.json();
+      return (data.description);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   if (isLicenseAnswer()) {
     return;
   }
   try {
-    console.log('licenseDesc', tree.answer);
     const desc = await fetchDescription();
-    details.innerHTML = `${desc}<br/><a href="${LICENSE_URL}" target="_blank">Description fetched from GitHub API</a>`;
+    setDescTxt(`${desc}<br/><a href="${LICENSE_URL}" target="_blank" rel="noopener noreferrer">Description fetched from GitHub API</a>`);
   } catch (error) {
     console.error(error);
   }
 }
 
+/**
+ * Set the content of the details element together with the expand and collapse icons.
+ * @param {html} content the content to be set in the details element
+ * @returns {void}
+ */
+function setDescTxt(content) {
+  details.innerHTML = 
+    `<sl-icon name="hand-index" slot="expand-icon"></sl-icon><sl-icon name="x-lg" slot="collapse-icon"></sl-icon>` + 
+    content;
+}
+
+/**
+ * Handle yes or no button clicks and update the decision tree accordingly.
+ * @param {string} choice 
+ * @returns {void}
+ */
 function main(choice) {
-  console.log('main');
+
+  function move(choice) {
+    if (choice === 'yes') {
+      tree = tree.yes;
+    } else if (choice === 'no') {
+      tree = tree.no;
+    }
+  }
+
   if (!tree.isQuestion) {
     return;
   }
+
   move(choice);
   nodeStack.push(tree);
-  console.log('\tnodeStack', nodeStack);
   updateInfo();
   persist();
 }
 
+/**
+ * Update the information displayed on the page based on the current state of the decision tree.
+ * This is called after every user interaction and on page reload.
+ * @returns {void}
+ */
 function updateInfo() {
-  details.innerHTML = '';
+
+  /**
+   * Return the string to be displayed in the details header element.
+   * If current node is a question that is returned and otherwise the answer is returned with a prefix and suffix appended.
+   * @returns {string}
+   */
+  function answerStr() {
+    if (isLicenseAnswer()) {
+      return tree.answer;
+    }
+    return 'Choose the ' + tree.answer + ' license.';
+  }
+
+  setDescTxt('');
   if (!tree.isQuestion) {
     details.summary = answerStr();
     setLicenseDesc();
-    console.log('\tanswer');
   } else {
     details.summary = tree.question;
-    details.innerText = tree.elaboration;
-    console.log('\tquestion');
+    setDescTxt(tree.elaboration);
   }
   buttonAvailability();
 }
 
+/**
+ * Convert the decision tree to a mermaid diagram and copy it to the clipboard.}
+ * @returns {void}
+ */
 function decisionTreeToMermaid() {
   const mermaid = 'graph TD\n';
   const nodes = [];
 
+  /**
+   * Ensure that the response is returned based on the type of node.
+   * If the node is a question, the question is returned and otherwise the answer is returned.
+   * @param {decisionTree} node 
+   * @returns {string} the response based on the type of node
+   */
   function response(node) {
     if (node.isQuestion) {
       return node.question;
@@ -73,6 +132,10 @@ function decisionTreeToMermaid() {
     return node.answer;
   }
 
+  /**
+   * Hopefully returns a unique string of 6 characters.
+   * @returns {string} a unique string of 6 characters
+   */
   function makeId() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let counter = 0;
@@ -84,6 +147,12 @@ function decisionTreeToMermaid() {
     return res;
   }
 
+  /**
+   * Traverse the decision tree and create the nodes for the mermaid diagram.
+   * @param {decisionTree} node
+   * @param {string} curId
+   * @returns {void}
+   */
   function traverse(node, curId) {
     if (!node) {
       return;
@@ -111,17 +180,18 @@ function decisionTreeToMermaid() {
   });
 }
 
+/**
+ * Check if the current node is a license answer.
+ * @returns {boolean} true if the current node is a license answer and false otherwise
+ */
 function isLicenseAnswer() {
   return UNDEFINED_LICENSES.some(str => (tree.answer).includes(str));
 }
 
-function answerStr() {
-  if (isLicenseAnswer()) {
-    return tree.answer;
-  }
-  return 'Choose the ' + tree.answer + ' license.';
-}
-
+/**
+ * Enable or disable the buttons based on the current state of the decision tree.
+ * @returns {void}
+ */
 function buttonAvailability() {
   if (!tree.isQuestion) {
     yesButton.disabled = true;
@@ -143,44 +213,37 @@ function buttonAvailability() {
   }
 }
 
-function move(choice) {
-  console.log('move');
-  if (choice === 'yes') {
-    tree = tree.yes;
-  } else if (choice === 'no') {
-    tree = tree.no;
-  }
-  console.log('\ttree', tree);
-}
-
+/**
+ * Persist the current state of the decision tree to the session storage.
+ * @returns {void}
+ */
 function persist() {
-  console.log('persist');
   sessionStorage.setItem('nodeStack', JSON.stringify(nodeStack));
-  console.log('\tpersistedNodeStack', JSON.parse(sessionStorage.getItem('nodeStack')));
 }
 
+/**
+ * Restore the decision tree to the last persisted state.
+ * @returns {void}
+ */
 function restore() {
-  console.log('restore');
   persistedNodeStack = JSON.parse(sessionStorage.getItem('nodeStack'));
   if (persistedNodeStack === null || persistedNodeStack.length === 0) {
-    console.log('\tno persistedNodeStack');
     tree = decisionTree.head;
     nodeStack.push(tree);
-    console.log('\tnodeStack', nodeStack);
     updateInfo();
     return;
   }
   nodeStack = persistedNodeStack;
-  console.log('\tnodeStack', nodeStack);
   tree = nodeStack[nodeStack.length - 1];
-  console.log('\ttree', tree);
   updateInfo();
 }
 
+/**
+ * Reset the decision tree to the root node.
+ * @returns {void}
+ */
 function reset() {
-  console.log('reset');
   if (tree == decisionTree.head) {
-    console.log('\troot');
     return;
   }
   tree = decisionTree.head;
@@ -189,10 +252,12 @@ function reset() {
   updateInfo();
 }
 
+/**
+ * Step back in the decision tree.
+ * @returns {void}
+ */
 function back() {
-  console.log('back');
   if (tree == decisionTree.head || nodeStack.length === 1) {
-    console.log('\troot');
     return;
   }
   nodeStack.pop();
@@ -201,8 +266,28 @@ function back() {
   updateInfo();
 }
 
+/**
+ * Set the licenses used based on the decision tree.
+ * @returns {void}
+ */
 function setLicensesUsed() {
-  console.log('returnAllLicenses');
+
+  /**
+   * Create a list of the included licenses in the decision tree.
+   * @param {decisionTree} node 
+   * @returns {String[]} leaves of the decision tree excluding non-license answers
+   */
+  function flatten(node) {
+    if (node.isQuestion) {
+      return flatten(node.yes).concat(flatten(node.no));
+    }
+    const res = node.answer;
+    if (res.includes('Consider') || res.includes('You should')) {
+      return;
+    }
+    return [res];
+  }
+
   const ul = document.createElement('ul');
   const licensesList = flatten(decisionTree.head);
   licensesList.forEach(item => {
@@ -216,17 +301,10 @@ function setLicensesUsed() {
   licenses.innerHTML = ul.outerHTML;
 }
 
-function flatten(node) {
-  if (node.isQuestion) {
-    return flatten(node.yes).concat(flatten(node.no));
-  }
-  const res = node.answer;
-  if (res.includes('Consider') || res.includes('You should')) {
-    return;
-  }
-  return [res];
-}
-
+/**
+ * Download the decision tree as a text file.
+ * @returns {void}
+ */
 function downloadTree() {
   const decisionTreeStr = JSON.stringify(decisionTree, null, 2);
   const blob = new Blob([decisionTreeStr], { type: 'text/plain' });
@@ -274,6 +352,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+/**
+ * The decision tree used to determine the appropriate open-source license for a project.
+ * Why are you even looking at this? Just get the Mermaid representation to identify the graph.
+ */
 const decisionTree = {
   head: {
     isQuestion: true,
@@ -445,6 +527,4 @@ const decisionTree = {
       answer: 'You should consider keeping your project closed-source.',
     },
   },
-}
-
-let tree;
+};
