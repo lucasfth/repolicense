@@ -2,15 +2,17 @@
 
 Will be hosted at [repolicense.com](https://repolicense.com)
 
-This project has been created as I felt like the amount of licenses available can be overwhelming and I wanted to provide a simple and easy to use tool for selecting the right license for your open source project.
+This project has been created as I felt like the number of licenses available can be overwhelming and I wanted to provide a simple and easy-to-use tool for selecting the right license for your open source project.
 
-If you have any feedback or suggestions for improvements, please create an issue on GitHub or reach out to me directly on [this email](mailto:contact+repolicense@lucashanson.dk?subject=Repolicense%20feedback) email.
+If you have any feedback or suggestions for improvements, please read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 
-I have chosen to license this project under the GNU GENERAL PUBLIC LICENSE Version 3.0. You can read the full license text [here](LICENSE.md).
+This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3.0. You can read the full license text [here](LICENSE.md).
+
+Of course, the license was chosen with the help of this project.
+Very meta.
 
 ## Contributing
 
-Right now I have not set up any guidelines for contributing to this project, but I am open to suggestions and improvements.
-You can always fork the project and create a pull request if you have any changes you would like to see implemented.
+If you want to contribute to this project, please read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
