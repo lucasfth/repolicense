@@ -79,13 +79,27 @@
       </p>
       <span id="licenses" class="wrap-text"></span>
       <p>
-
-        You can <b>download the javascript decision tree</b> by clicking <a href="#" id="download-tree">here</a>.
+        You can <b>download the JavaScript decision tree</b> by clicking 
+        <sl-tooltip content="Click to download the JS decision tree">
+          <a href="#"
+          id="download-tree"
+          aria-label="Click to download JavaScript decision tree">here</a>.
+        </sl-tooltip>
         But good luck with reading it, it's quite big 🥵
         <br/>
-        You can also <b>download the Mermaid diagram</b> to your clipboard by clicking
-        <a href="#" id="download-mermaid">here</a>.
-        The Mermaid diagram can then be pasted into a Mermaid editor to view it, e.g. <a href="https://mermaid.live" target="_blank" rel="noopener noreferrer">here</a>.
+        You can also <b>copy the Mermaid diagram</b> to your clipboard by clicking
+        <sl-tooltip content="Click to copy mermaid decision tree">
+          <a href="#"
+          id="download-mermaid"
+          aria-label="Click to copy the mermaid decision tree">here</a>.
+        </sl-tooltip>
+        The Mermaid diagram can then be pasted into a Mermaid editor to view it, e.g. 
+        <sl-tooltip content="Link to Mermaid.live">
+          <a href="https://mermaid.live"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Link to Mermaid.live">here</a>.
+        </sl-tooltip>
         <br/>
         <br/>
         Oh, and you will not be able to find the Mermaid diagram or the license list, as they are generated from the JavaScript decision tree.
@@ -110,9 +124,14 @@
         <br/>
         <br/>
         If you are an expert in licensing or you have general feedback, you can either create a new conversation or a new issue on GitHub.
-        You can find the source code <a href="https://github.com/lucasfth/repolicense" target="_blank" rel="noopener noreferrer">here</a>.
-        You can also reach out to me with <a href="mailto:contact+repolicense@lucashanson.dk?subject=Repolicense%20feedback">this email</a>.
-        This project is open source and can be found on GitHub <a href="https://github.com/lucasfth/repolicense" target="_blank" rel="noopener noreferrer">here</a>.
+        You can find the source code
+        <sl-tooltip content="Link to GitHub repo">
+          <a href="https://github.com/lucasfth/repolicense"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Link to GitHub repo">here</a>.
+        </sl-tooltip>
+        You can also reach out to me with <a href="mailto:contact+repolicense@lucashanson.dk?subject=Repolicense%20feedback" aria-label="Link to email Lucas Hanson">this email</a>.
       </p>
     </div>
     <sl-button slot="footer" variant="primary">Close</sl-button>
