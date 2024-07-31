@@ -16,6 +16,7 @@ let tree;
 
 /**
  * Set the license description based on the fetched data from the GitHub API.
+ * If the current node is not a license answer, the elaboration is instead displayed.
  * @returns {Promise<void>}
  */
 async function setLicenseDesc() {
@@ -35,6 +36,7 @@ async function setLicenseDesc() {
   }
 
   if (isLicenseAnswer()) {
+    setDescTxt(`${tree.elaboration}`)
     return;
   }
   try {
@@ -47,6 +49,7 @@ async function setLicenseDesc() {
 
 /**
  * Set the content of the details element together with the expand and collapse icons.
+ * This needs to be done here as when innerHTML is replaced the icons will be removed.
  * @param {html} content the content to be set in the details element
  * @returns {void}
  */
@@ -101,11 +104,16 @@ function updateInfo() {
   }
 
   setDescTxt('');
+
   if (!tree.isQuestion) {
     details.summary = answerStr();
+    details.style.border = "2px solid #28BAFD";
+    details.style.borderRadius = "5px";
     setLicenseDesc();
   } else {
     details.summary = tree.question;
+    details.style.border = "none";
+    details.style.borderRadius = "0";
     setDescTxt(tree.elaboration);
   }
   buttonAvailability();
@@ -517,6 +525,7 @@ const decisionTree = {
             no: { // Do you want a license for fonts? -> No
               isQuestion: false,
               answer: 'Consider using a proprietary license or another specialized license.',
+              elaboration: `You should consider using a proprietary license or another specialized license by consulting with a legal expert.`,
             },
           },
         },
@@ -525,6 +534,7 @@ const decisionTree = {
     no: { // Do you want to open-source your project? -> No
       isQuestion: false,
       answer: 'You should consider keeping your project closed-source.',
+      elaboration: `But what where you even doing here in the first place?`,
     },
   },
 };
