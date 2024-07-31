@@ -2,7 +2,7 @@
 
 ![Do you have an idea for a better logo? Then please reach out](./app/public/favicon-192x192.png "Do you have an idea for a better logo? Then please reach out")
 
-Will be hosted at [repolicense.com](https://repolicense.com)
+It is hosted at [repolicense.com](https://repolicense.com)
 
 This project has been created as I felt like the number of licenses available can be overwhelming and I wanted to provide a simple and easy-to-use tool for selecting the right license for your open source project.
 
