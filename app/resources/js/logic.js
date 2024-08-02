@@ -35,12 +35,38 @@ async function setLicenseDesc() {
     }
   }
 
+  /**
+   * Add opensource.org to domain names in the description if they are relative and open in a new tab.
+   * @param {String} desc
+   * @returns {HTML} the description with fixed links
+   */
+  function fixDescLinks(desc) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(desc, 'text/html');
+
+    const links = doc.querySelectorAll('a');
+
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href) { // Open in new tab
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      } // Add domain if relative
+      if (href && !href.startsWith('http')) {
+        link.setAttribute('href', `https://opensource.org${href}`);
+      }
+    });
+
+    return doc.body.innerHTML;
+  }
+
   if (isLicenseAnswer()) {
     setDescTxt(`${tree.elaboration}`)
     return;
   }
   try {
-    const desc = await fetchDescription();
+    var desc = await fetchDescription();
+    desc = fixDescLinks(desc);
     setDescTxt(`${desc}<br/><a href="${LICENSE_URL}" target="_blank" rel="noopener noreferrer">Description fetched from GitHub API</a>`);
   } catch (error) {
     console.error(error);
