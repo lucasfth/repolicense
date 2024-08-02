@@ -65,9 +65,9 @@ async function setLicenseDesc() {
     return;
   }
   try {
-    var desc = await fetchDescription();
-    desc = fixDescLinks(desc);
-    setDescTxt(`${desc}<br/><a href="${LICENSE_URL}" target="_blank" rel="noopener noreferrer">Description fetched from GitHub API</a>`);
+    const desc = await fetchDescription();
+    const descFixed = fixDescLinks(desc);
+    setDescTxt(`${descFixed}<br/><a href="${LICENSE_URL}" target="_blank" rel="noopener noreferrer">Description fetched from GitHub API</a>`);
   } catch (error) {
     console.error(error);
   }
