@@ -560,7 +560,7 @@ const decisionTree = {
     no: { // Do you want to open-source your project? -> No
       isQuestion: false,
       answer: 'You should consider keeping your project closed-source.',
-      elaboration: `But what where you even doing here in the first place?`,
+      elaboration: `You should consider keeping your project closed-source to protect your intellectual property by not sharing the source code.`,
     },
   },
 };
