@@ -7,7 +7,7 @@ Repolicense aims to solve this by providing a simple, intuitive tool that guides
 
 You can explore the tool at [repolicense.com](https://repolicense.com).
 
-![preview of the website](./app/public/og-image.png)
+![preview of the website](./preview_image.jpeg)
 
 ## Why Repolicense?
 
