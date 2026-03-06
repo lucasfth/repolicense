@@ -1,3 +1,10 @@
+> **ℹ️ Info**\
+> [Repolicense.com](https://repolicense.com) will be sunsetted the 2026/05/20.
+> This is because I did not want to pay for the domain, and I believe a CLI would be a more appropriate interface for the tool.
+> The replacement for the tool can thus be found at [github.com/lucasfth/repolicense-cli](https://github.com/lucasfth/repolicense-cli).
+> The CLI also provides an extra feature.
+> It provides a compatibility feature that lets you determine which licenses are compatible with the licensed submodules used.
+
 # Repolicense
 
 ![demo of the repolicense](./repolicense_demo.gif)
